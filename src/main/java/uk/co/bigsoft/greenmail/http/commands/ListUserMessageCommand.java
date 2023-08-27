@@ -49,7 +49,6 @@ public class ListUserMessageCommand extends BaseHandler {
 			MimeMessage m = sm.getMimeMessage();
 			Address a = m.getSender();
 			if (a == null) {
-				System.out.println("");
 				Address[] addresses = m.getFrom();
 				if (isEmailInAddresses(email, addresses)) {
 					ret.add(sm);
