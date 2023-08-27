@@ -72,7 +72,7 @@ class ListFolderPage extends Component {
 					<Table className="table">
 						<TableHead>
 							<TableRow>
-								<TableCell>Actions</TableCell>
+								<TableCell style={{minWidth: "96px"}}>Actions</TableCell>
 								<TableCell>FQN</TableCell>
 								<TableCell>Name</TableCell>
 								<TableCell># Messages</TableCell>

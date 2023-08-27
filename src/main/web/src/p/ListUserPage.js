@@ -64,7 +64,7 @@ class ListUserPage extends Component {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>Actions</TableCell>
+								<TableCell style={{minWidth: "96px"}}>Actions</TableCell>
 								<TableCell>Email</TableCell>
 								<TableCell>Login</TableCell>
 								<TableCell>Password</TableCell>

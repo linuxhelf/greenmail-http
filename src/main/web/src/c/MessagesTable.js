@@ -34,7 +34,7 @@ function MessagesTable(props) {
 					<HighlightColumn col={highlightColumn}/>
 					<TableHead>
 						<TableRow>
-							<TableCell style={{width: '5%'}}>Actions</TableCell>
+							<TableCell style={{minWidth: "96px", width: '5%'}}>Actions</TableCell>
 							<TableCell style={{width: '18%'}}>Mailbox/Id</TableCell>
 							<TableCell style={{width: '18%'}}>From</TableCell>
 							<TableCell style={{width: '18%'}}>To</TableCell>
