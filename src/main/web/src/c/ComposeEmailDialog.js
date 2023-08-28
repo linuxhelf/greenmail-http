@@ -71,7 +71,7 @@ class ComposeEmailDialog extends Component{
         return (
             <span>
                 <Tooltip title="Compose Email">
-                    <Button onClick={this.openDialog} class="btn btn-primary" style={{margin:2}}>
+                    <Button onClick={this.openDialog} className="btn btn-primary" style={{margin:2}}>
                         <EditIcon/>Compose
                     </Button>
                 </Tooltip>
