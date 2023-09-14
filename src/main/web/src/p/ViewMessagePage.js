@@ -31,7 +31,8 @@ class ViewMessagePage extends Component {
 				"bcc": [],
 			},
 			error: false,
-			value:0
+			value:0,
+			bodytype: 0
 		}
 	}
 
@@ -63,9 +64,28 @@ class ViewMessagePage extends Component {
 		})
 	}
 
+	handleBodyTypeChange = (event, newValue) => {
+		this.setState({
+				bodytype: newValue
+		})
+	}
+
 	getContent = () => {
 		let value = this.state.value
 		return (value === 0) ? this.getMessageDetails() : this.getHeaderDetails()
+	}
+
+	getBody = () => {
+		switch (this.state.bodytype) {
+			case 0:
+				return <>{this.state.data.body || ""}</>;
+			case 1:
+				return <div dangerouslySetInnerHTML={{__html: this.state.data.htmlBody || ""}} />;
+			case 2:
+				return <>{this.state.data.htmlBody || ""}</>;
+			default:
+				return "";
+		}
 	}
 
 	getHeaderDetails = () => {
@@ -90,7 +110,7 @@ class ViewMessagePage extends Component {
 	}
 
 	getMessageDetails = () => {
-		const {flags, from, to, cc, bcc, subject, body} = this.state.data
+		const {flags, from, to, cc, bcc, subject, body, htmlBody} = this.state.data
 		return(
 			<Paper>
 				<Table>
@@ -121,7 +141,18 @@ class ViewMessagePage extends Component {
 						</TableRow>
 						<TableRow hover>
 							<TableCell>Body</TableCell>
-							<TableCell>{body}</TableCell>
+							<TableCell>
+							<Tabs
+								value={this.state.bodytype}
+								indicatorColor="primary"
+								textColor="primary"
+								onChange={this.handleBodyTypeChange}>
+								<Tab label="Plain" key="plain" disabled={body === ""}/>
+								<Tab label="HTML" key="html" disabled={htmlBody === ""}/>
+								<Tab label="HTML-Source" key="htmlsrc" disabled={htmlBody === ""}/>
+							</Tabs>
+							{this.getBody()}
+							</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
