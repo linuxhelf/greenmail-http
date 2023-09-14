@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import Alert from 'react-bootstrap/Alert'
 import Table from '@material-ui/core/Table'
-import {DownloadMessageUrl, ViewMessageUrl} from '../c/GmhUrl'
+import {DownloadMessageUrl, ViewMessageUrl, AttachmentDownloadUrl} from '../c/GmhUrl'
 import EmailAddresses from '../c/EmailAddresses'
 import {BreadcrumbContext} from '../c/breadcrumbContext'
 import PageHeader from '../m/PageHeader'
@@ -29,6 +29,7 @@ class ViewMessagePage extends Component {
 				"from": [],
 				"cc": [],
 				"bcc": [],
+				"attachments": [],
 			},
 			error: false,
 			value:0,
@@ -110,7 +111,8 @@ class ViewMessagePage extends Component {
 	}
 
 	getMessageDetails = () => {
-		const {flags, from, to, cc, bcc, subject, body, htmlBody} = this.state.data
+		const {flags, from, to, cc, bcc, subject, body, htmlBody, attachments} = this.state.data
+		const {mailbox, uid} = this.props.match.params
 		return(
 			<Paper>
 				<Table>
@@ -153,6 +155,12 @@ class ViewMessagePage extends Component {
 							</Tabs>
 							{this.getBody()}
 							</TableCell>
+						</TableRow>
+						<TableRow hover>
+							<TableCell>Attachments</TableCell>
+							<TableCell>{attachments.map((attachment) => <div>
+								<a href={AttachmentDownloadUrl(mailbox, uid, attachment.filename)}>{attachment.filename}</a>
+							</div>)}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>

@@ -19,7 +19,8 @@ let mappings = {
 	ADD_USER: '/u/add',
 	SEND_EMAIL: '/send',
 	UPLOAD_EMAIL: '/import',
-	DOWNLOAD_MESSAGE: '/dl/:mailbox/:uid'
+	DOWNLOAD_MESSAGE: '/dl/:mailbox/:uid',
+	DOWNLOAD_ATTACHMENT: '/cid/:mailbox/:uid/:filename'
 }
 
 export let ServerConfig = () => {
@@ -76,6 +77,11 @@ export let DeleteMessageUrl = (mailbox, uid) => {
 export let DownloadMessageUrl = (mailbox, uid) => {
 	let encMailbox = encodeURIComponent(mailbox)
 	return base + mappings.DOWNLOAD_MESSAGE.replace(':mailbox', encMailbox).replace(':uid', uid)
+}
+
+export let AttachmentDownloadUrl = (mailbox, uid, filename) => {
+	let encMailbox = encodeURIComponent(mailbox)
+	return base + mappings.DOWNLOAD_ATTACHMENT.replace(':mailbox', encMailbox).replace(':uid', uid).replace(':filename', filename)
 }
 
 export let ViewMessageUrl = (mailbox, uid) => {
