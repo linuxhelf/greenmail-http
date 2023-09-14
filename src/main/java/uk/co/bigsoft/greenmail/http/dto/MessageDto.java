@@ -17,7 +17,7 @@ public class MessageDto {
 	private long uid;
 	private String messageId;
 	private String subject;
-	private String body;
+	protected String body;
 	private List<String> to;
 	private List<String> from;
 	private List<String> cc;

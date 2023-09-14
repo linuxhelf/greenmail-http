@@ -17,7 +17,8 @@ let mappings = {
 	DELETE_MAILBOX: '/m/:mailbox/delete',
 	DELETE_USER: '/u/:email/delete',
 	ADD_USER: '/u/add',
-	SEND_EMAIL: '/send'
+	SEND_EMAIL: '/send',
+	DOWNLOAD_ATTACHMENT: '/cid/:mailbox/:uid/:filename'
 }
 
 export let ServerConfig = () => {
@@ -69,6 +70,12 @@ export let DeleteUserUrl = (email) => {
 export let DeleteMessageUrl = (mailbox, uid) => {
 	let encMailbox = encodeURIComponent(mailbox)
 	return base + mappings.DELETE_MESSAGE.replace(':mailbox', encMailbox).replace(':uid', uid)
+}
+
+export let AttachmentDownloadUrl = (mailbox, uid, filename) => {
+	let encMailbox = encodeURIComponent(mailbox)
+	let encFilename = encodeURIComponent(filename)
+	return base + mappings.DOWNLOAD_ATTACHMENT.replace(':mailbox', encMailbox).replace(':uid', uid).replace(':filename', encFilename)
 }
 
 export let ViewMessageUrl = (mailbox, uid) => {
