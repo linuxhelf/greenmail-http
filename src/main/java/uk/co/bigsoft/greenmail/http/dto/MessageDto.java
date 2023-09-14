@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.icegreen.greenmail.store.MailFolder;
 import com.icegreen.greenmail.store.StoredMessage;
@@ -18,6 +20,7 @@ public class MessageDto {
 	private String messageId;
 	private String subject;
 	private String body;
+	private String body_html;
 	private List<String> to;
 	private List<String> from;
 	private List<String> cc;
@@ -34,7 +37,14 @@ public class MessageDto {
 		}
 		messageId = mm.getMessageID();
 		subject = mm.getSubject();
-		body = mm.getContent().toString();
+		Object content = mm.getContent();
+		body = "";
+		body_html = "";
+		if (content instanceof String) {
+			body = content.toString();
+		} else if (content instanceof MimeMultipart) {
+			this.analyzeBodyParts((MimeMultipart) content);
+		}
 
 		Address[] a;
 		a = mm.getRecipients(RecipientType.TO);
@@ -45,6 +55,25 @@ public class MessageDto {
 		bcc = toStrings(a);
 		a = mm.getFrom();
 		from = toStrings(a);
+	}
+
+	private void analyzeBodyParts(MimeMultipart content) throws MessagingException, IOException {
+		for (int i = 0; i < content.getCount(); i++) {
+			BodyPart part = content.getBodyPart(i);
+			if ("attachment".equals(part.getDisposition())) {
+				// TODO
+			} else if (part.isMimeType("multipart/*")) {
+				Object partContent = part.getContent();
+				if (partContent instanceof MimeMultipart) {
+					this.analyzeBodyParts((MimeMultipart) partContent);
+				}
+			} else if (part.isMimeType("text/plain")) {
+				body += part.getContent();
+			} else if (part.isMimeType("text/html")) {
+				body_html += part.getContent();
+			}
+		}
+
 	}
 
 	public long getUid() throws MessagingException {
@@ -65,6 +94,10 @@ public class MessageDto {
 
 	public String getBody() throws MessagingException, IOException {
 		return body;
+	}
+
+	public String getHtmlBody() throws MessagingException, IOException {
+		return body_html;
 	}
 
 	public List<String> getFrom() throws MessagingException {
