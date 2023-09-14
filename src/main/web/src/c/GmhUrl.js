@@ -18,7 +18,8 @@ let mappings = {
 	DELETE_USER: '/u/:email/delete',
 	ADD_USER: '/u/add',
 	SEND_EMAIL: '/send',
-	UPLOAD_EMAIL: '/import'
+	UPLOAD_EMAIL: '/import',
+	DOWNLOAD_MESSAGE: '/dl/:mailbox/:uid'
 }
 
 export let ServerConfig = () => {
@@ -70,6 +71,11 @@ export let DeleteUserUrl = (email) => {
 export let DeleteMessageUrl = (mailbox, uid) => {
 	let encMailbox = encodeURIComponent(mailbox)
 	return base + mappings.DELETE_MESSAGE.replace(':mailbox', encMailbox).replace(':uid', uid)
+}
+
+export let DownloadMessageUrl = (mailbox, uid) => {
+	let encMailbox = encodeURIComponent(mailbox)
+	return base + mappings.DOWNLOAD_MESSAGE.replace(':mailbox', encMailbox).replace(':uid', uid)
 }
 
 export let ViewMessageUrl = (mailbox, uid) => {

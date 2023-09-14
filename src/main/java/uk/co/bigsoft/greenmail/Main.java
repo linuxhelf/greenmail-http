@@ -12,6 +12,7 @@ import uk.co.bigsoft.greenmail.http.commands.DeleteMailboxCommand;
 import uk.co.bigsoft.greenmail.http.commands.DeleteMessageCommand;
 import uk.co.bigsoft.greenmail.http.commands.AddUserCommand;
 import uk.co.bigsoft.greenmail.http.commands.DeleteUserCommand;
+import uk.co.bigsoft.greenmail.http.commands.EmlDownloadCommand;
 import uk.co.bigsoft.greenmail.http.commands.EmlUploadCommand;
 import uk.co.bigsoft.greenmail.http.commands.ImapAllMessagesCommand;
 import uk.co.bigsoft.greenmail.http.commands.ImapGetInBoxCommand;
@@ -70,6 +71,7 @@ public class Main {
 		app.get("/d/:mailbox/:uid", new DeleteMessageCommand(greenMail));
 		app.post("/send", new SmtpSendEmailCommand(greenMail));
 		app.get("/v/:mailbox/:uid", new ViewMessageCommand(greenMail));
+		app.get("/dl/:mailbox/:uid", new EmlDownloadCommand(greenMail));
 		app.get("/u/:email/delete", new DeleteUserCommand(greenMail));
 		app.post("/import", new EmlUploadCommand(greenMail));
 		app.post("/u/add", new AddUserCommand(greenMail));
