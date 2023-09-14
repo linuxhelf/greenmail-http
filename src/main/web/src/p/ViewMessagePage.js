@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import Alert from 'react-bootstrap/Alert'
 import Table from '@material-ui/core/Table'
-import {EmlExportUrl, ViewMessageUrl} from '../c/GmhUrl'
+import {EmlExportUrl, ViewMessageUrl, AttachmentDownloadUrl} from '../c/GmhUrl'
 import EmailAddresses from '../c/EmailAddresses'
 import {BreadcrumbContext} from '../c/breadcrumbContext'
 import PageHeader from '../m/PageHeader'
+import ShadowDom from '../m/ShadowDom'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
@@ -29,9 +30,11 @@ class ViewMessagePage extends Component {
 				"from": [],
 				"cc": [],
 				"bcc": [],
+				"attachments": [],
 			},
 			error: false,
-			value:0
+			value:0,
+			bodytype: 0
 		}
 	}
 
@@ -63,9 +66,28 @@ class ViewMessagePage extends Component {
 		})
 	}
 
+	handleBodyTypeChange = (event, newValue) => {
+		this.setState({
+				bodytype: newValue
+		})
+	}
+
 	getContent = () => {
 		let value = this.state.value
 		return (value === 0) ? this.getMessageDetails() : this.getHeaderDetails()
+	}
+
+	getBody = () => {
+		switch (this.state.bodytype) {
+			case 0:
+				return <div key="plain" style={{whiteSpace: "pre-wrap"}}>{this.state.data.body || ""}</div>;
+			case 1:
+				return <ShadowDom key="html" html={this.state.data.htmlBody || ""} />;
+			case 2:
+				return <div key="src" style={{whiteSpace: "pre-wrap"}}>{this.state.data.htmlBody || ""}</div>;
+			default:
+				return "";
+		}
 	}
 
 	getHeaderDetails = () => {
@@ -90,7 +112,8 @@ class ViewMessagePage extends Component {
 	}
 
 	getMessageDetails = () => {
-		const {flags, from, to, cc, bcc, subject, body} = this.state.data
+		const {flags, from, to, cc, bcc, subject, htmlBody, attachments} = this.state.data
+		const {mailbox, uid} = this.props.match.params
 		return(
 			<Paper>
 				<Table>
@@ -121,7 +144,24 @@ class ViewMessagePage extends Component {
 						</TableRow>
 						<TableRow hover>
 							<TableCell>Body</TableCell>
-							<TableCell>{body}</TableCell>
+							<TableCell>
+							{htmlBody !== "" && <Tabs
+								value={this.state.bodytype}
+								indicatorColor="primary"
+								textColor="primary"
+								onChange={this.handleBodyTypeChange}>
+								<Tab label="Plain" key="plain" />
+								<Tab label="HTML" key="html" />
+								<Tab label="HTML-Source" key="htmlsrc" />
+							</Tabs>}
+							{this.getBody()}
+							</TableCell>
+						</TableRow>
+						<TableRow hover>
+							<TableCell>Attachments</TableCell>
+							<TableCell>{attachments.map((attachment) => <div key={attachment.filename} >
+								<a href={AttachmentDownloadUrl(mailbox, uid, attachment.filename)}>{attachment.filename}</a>
+							</div>)}</TableCell>
 						</TableRow>
 					</TableBody>
 				</Table>
