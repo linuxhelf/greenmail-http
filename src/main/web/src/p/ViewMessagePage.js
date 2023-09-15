@@ -6,6 +6,7 @@ import {DownloadMessageUrl, ViewMessageUrl, AttachmentDownloadUrl} from '../c/Gm
 import EmailAddresses from '../c/EmailAddresses'
 import {BreadcrumbContext} from '../c/breadcrumbContext'
 import PageHeader from '../m/PageHeader'
+import ShadowDom from '../m/ShadowDom'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
@@ -81,7 +82,7 @@ class ViewMessagePage extends Component {
 			case 0:
 				return <>{this.state.data.body || ""}</>;
 			case 1:
-				return <div dangerouslySetInnerHTML={{__html: this.state.data.htmlBody || ""}} />;
+				return <ShadowDom html={this.state.data.htmlBody || ""} />;
 			case 2:
 				return <>{this.state.data.htmlBody || ""}</>;
 			default:
@@ -111,7 +112,7 @@ class ViewMessagePage extends Component {
 	}
 
 	getMessageDetails = () => {
-		const {flags, from, to, cc, bcc, subject, body, htmlBody, attachments} = this.state.data
+		const {flags, from, to, cc, bcc, subject, htmlBody, attachments} = this.state.data
 		const {mailbox, uid} = this.props.match.params
 		return(
 			<Paper>
@@ -144,21 +145,21 @@ class ViewMessagePage extends Component {
 						<TableRow hover>
 							<TableCell>Body</TableCell>
 							<TableCell>
-							<Tabs
+							{htmlBody !== "" && <Tabs
 								value={this.state.bodytype}
 								indicatorColor="primary"
 								textColor="primary"
 								onChange={this.handleBodyTypeChange}>
-								<Tab label="Plain" key="plain" disabled={body === ""}/>
-								<Tab label="HTML" key="html" disabled={htmlBody === ""}/>
-								<Tab label="HTML-Source" key="htmlsrc" disabled={htmlBody === ""}/>
-							</Tabs>
+								<Tab label="Plain" key="plain" />
+								<Tab label="HTML" key="html" />
+								<Tab label="HTML-Source" key="htmlsrc" />
+							</Tabs>}
 							{this.getBody()}
 							</TableCell>
 						</TableRow>
 						<TableRow hover>
 							<TableCell>Attachments</TableCell>
-							<TableCell>{attachments.map((attachment) => <div>
+							<TableCell>{attachments.map((attachment) => <div key={attachment.filename} >
 								<a href={AttachmentDownloadUrl(mailbox, uid, attachment.filename)}>{attachment.filename}</a>
 							</div>)}</TableCell>
 						</TableRow>
