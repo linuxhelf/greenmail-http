@@ -2,6 +2,7 @@
 
 JAR=`ls target/greenmail-http*.jar`
 java	\
+    -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n \
 	-Dgreenmail.setup.test.smtp		\
 	-Dgreenmail.setup.test.pop3		\
 	-Dgreenmail.setup.test.imap		\
