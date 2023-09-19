@@ -17,7 +17,7 @@ echo "yarn install"
 yarn install
 
 echo "Running React build"
-react-scripts build
+yarn run build
 
 echo "Moving build folder to $OUT"
 if [ -f "$OUT" ]
