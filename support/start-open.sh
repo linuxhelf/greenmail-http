@@ -10,4 +10,5 @@ java	\
 	-Dgreenmail.verbose			\
 	-Duk.co.bigsoft.greenmail.add_test_data	\
 	-Duk.co.bigsoft.greenmail.ac_anywhere	\
+	-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=7001 \
 	-jar $JAR
