@@ -15,7 +15,7 @@ public class ImapGetInBoxCommand extends BaseHandler {
 	@Override
 	public void handle(Context ctx) throws Exception {
 		GreenMailUser u = utils.getUser(ctx, gm.getManagers().getUserManager());
-		MailFolder mf = im.getInbox(u);
+		MailFolder mf = getIm().getInbox(u);
 		ctx.json(dto.toMessages(mf, mf.getMessages()));
 	}
 

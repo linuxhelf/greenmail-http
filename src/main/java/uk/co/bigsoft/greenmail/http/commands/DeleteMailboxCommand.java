@@ -14,13 +14,13 @@ public class DeleteMailboxCommand extends BaseHandler {
 
 	@Override
 	public void handle(Context ctx) throws Exception {
-		MailFolder mb = utils.getMailbox(ctx, im);
+		MailFolder mb = utils.getMailbox(ctx, getIm());
 		if (mb.getName().equalsIgnoreCase(ImapConstants.INBOX_NAME)) {
 			ctx.json("ERROR");
 			return;
 		}
 		mb.deleteAllMessages();
-		im.getStore().deleteMailbox(mb);
+		getIm().getStore().deleteMailbox(mb);
 		mb.expunge();
 		ctx.json("OK");
 	}

@@ -18,7 +18,7 @@ public class EmlExportCommand extends BaseHandler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        MailFolder mailbox = utils.getMailbox(ctx, im);
+        MailFolder mailbox = utils.getMailbox(ctx, getIm());
 		long uid = utils.getUid(ctx);
 		StoredMessage sm = mailbox.getMessage(uid);
         MimeMessage mime = sm.getMimeMessage();

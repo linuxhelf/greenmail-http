@@ -10,10 +10,13 @@ public abstract class BaseHandler implements Handler {
 	protected GreenMail gm;
 	protected Utils utils = new Utils();
 	protected Dto dto = new Dto();
-	protected ImapHostManager im = null;
 	
 	public BaseHandler(GreenMail greenMail) {
 		gm = greenMail;
-		im = gm.getManagers().getUserManager().getImapHostManager();
+	}
+
+	protected ImapHostManager getIm() {
+		// can't be cached as member, or it would be a stale objekt after gm.reset() from ResetCommand
+		return gm.getManagers().getUserManager().getImapHostManager();
 	}
 }
