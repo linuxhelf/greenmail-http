@@ -20,7 +20,7 @@ public class ImapListMailBoxCommand extends BaseHandler {
 	@Override
 	public void handle(Context ctx) throws Exception {
 		GreenMailUser user = utils.getUser(ctx, gm.getManagers().getUserManager());
-		Collection<MailFolder> mailboxes = im.listMailboxes(user, "*");
+		Collection<MailFolder> mailboxes = getIm().listMailboxes(user, "*");
 		ctx.json(dto.toMailFolder(mailboxes));
 	}
 

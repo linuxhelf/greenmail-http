@@ -24,7 +24,7 @@ public class AttachmentDownloadCommand extends BaseHandler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        MailFolder mailbox = utils.getMailbox(ctx, im);
+        MailFolder mailbox = utils.getMailbox(ctx, getIm());
         long uid = utils.getUid(ctx);
         String filename = ctx.pathParam("filename");
         StoredMessage sm = mailbox.getMessage(uid);

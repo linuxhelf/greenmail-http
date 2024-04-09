@@ -23,7 +23,7 @@ public class ImapAllMessagesCommand extends BaseHandler {
 
 	@Override
 	public void handle(Context ctx) throws Exception {
-		List<MessageDto> all = getAllMessages(im.getStore());
+		List<MessageDto> all = getAllMessages(getIm().getStore());
 		ctx.json(all);
 	}
 

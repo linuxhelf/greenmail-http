@@ -29,7 +29,7 @@ public class ListDomainMessageCommand extends BaseHandler {
 		String domain = utils.getDomain(ctx);
 		List<MessageDto> messages = new ArrayList<>();
 
-		for(MailFolder mailbox : im.getStore().listMailboxes("*")) {
+		for(MailFolder mailbox : getIm().getStore().listMailboxes("*")) {
 			ArrayList<StoredMessage> end;
 			if ("from".equals(who)) {
 				end = filterBySender(domain, mailbox.getMessages());

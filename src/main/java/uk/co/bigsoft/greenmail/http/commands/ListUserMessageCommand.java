@@ -29,7 +29,7 @@ public class ListUserMessageCommand extends BaseHandler {
 		String email = utils.getEmail(ctx);
 		List<MessageDto> messages = new ArrayList<>();
 
-		for(MailFolder mailbox : im.getStore().listMailboxes("*")) {
+		for(MailFolder mailbox : getIm().getStore().listMailboxes("*")) {
 			ArrayList<StoredMessage> end;
 			if ("from".equals(who)) {
 				end = filterBySender(email, mailbox.getMessages());
