@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container'
 import SoftwareUpdateMessage from '../m/SoftwareUpdateMessage'
 import CheckingSoftwareVersion from '../m/CheckingSoftwareVersion'
 import SoftwareIsUpToDate from '../m/SoftwareIsUpToDate'
+import SoftwareIsUnreleased from '../m/SoftwareIsUnreleased'
 import {read as brainRead, write as brainWrite} from '../c/Brain'
 
 
@@ -20,6 +21,30 @@ class WelcomePage extends Component {
 		}
 	}
 
+	/**
+	 * a < b for versions
+	 * 
+	 * works for different lengths and parts with multiple digits,
+	 * e.g. 1.1 < 1.3.1? 1.15.1 < 1.4.0?
+	 */
+	compareVersion(a,b) {
+		let a_parts = a.split(".").map((n) => parseInt(n))
+		let b_parts = b.split(".").map((n) => parseInt(n))
+		for (let i = 0; i < b_parts.length; i++) {
+			if (i == a_parts.length) {
+				// a is finished
+				// => a is smaller
+				return true;
+			}
+			if (a_parts[i] != b_parts[i]) {
+				return a_parts[i] < b_parts[i];
+			}
+		}
+		// b is finished or both are equal
+		// => a is not smaller
+		return false;
+	}
+
 	componentDidMount() {
 		let latestTag = brainRead('latestTag')
 		if (latestTag !== null) {
@@ -30,7 +55,7 @@ class WelcomePage extends Component {
 		axios.get("https://api.github.com/repos/davidnewcomb/greenmail-http/tags")
 			.then( (response, state) => {
 				const tags = response.data.map( tag => tag.name)
-				const stags = tags.sort( (a,b) => a < b)
+				const stags = tags.sort(this.compareVersion)
 				const latestTag = stags[0]
 				brainWrite('latestTag', latestTag)
 				this.displayUserMessage(latestTag)
@@ -62,7 +87,11 @@ class WelcomePage extends Component {
 	displayUserMessage(version) {
 		let status = null
 		if (packageJson.version !== version) {
-			status = <SoftwareUpdateMessage latest={version}/>
+			if (this.compareVersion(packageJson.version, version)) {
+				status = <SoftwareUpdateMessage latest={version}/>
+			} else {
+				status = <SoftwareIsUnreleased latest={version}/>
+			}
 		} else {
 			status = <SoftwareIsUpToDate/>
 		}
